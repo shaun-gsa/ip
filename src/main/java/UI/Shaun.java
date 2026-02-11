@@ -1,5 +1,11 @@
+package UI;
+
 import Shaun.exception.InvalidCommandException;
 import Shaun.exception.ShaunException;
+import Task.Task;
+import Task.Todo;
+import Task.Event;
+import Task.Deadline;
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -65,7 +71,7 @@ public class Shaun {
                 }
 
                 throw new InvalidCommandException(
-                        "Command Invalid. Please enter a vlaid command."
+                        "Command Invalid. Please enter a valid command."
                 );
                 /*taskLists.add(new Task(userInput));
                 printLine();
@@ -85,7 +91,7 @@ public class Shaun {
 
     private static void printList(ArrayList<Task> taskLists) {
         printLine();
-        System.out.println("Here are the tasks in yuor list:");
+        System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < taskLists.size(); i++) {
             System.out.println((i + 1) + ". " + taskLists.get(i));
         }
