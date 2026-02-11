@@ -1,5 +1,7 @@
+package Task;
+
 public class Task {
-    protected String description;
+    public String description;
     protected boolean isDone;
 
     public Task(String description) {
@@ -7,15 +9,15 @@ public class Task {
         this.isDone = false;
     }
 
-    void markDone() {
+    public void markDone() {
         isDone = true;
     }
 
-    void unmarkDone() {
+    public void unmarkDone() {
         isDone = false;
     }
 
-    String getStatus() {
+    public String getStatus() {
         return isDone ? "[X]" : "[ ]";
     }
 
