@@ -7,6 +7,9 @@ import Task.Todo;
 import Task.Event;
 import Task.Deadline;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -16,7 +19,7 @@ public class Shaun {
         System.out.println("____________________________________________________________");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ShaunException, IOException {
         printLine();
         System.out.println("Hello! I'm Shaun");
         System.out.println("What can I do for you?");
@@ -24,6 +27,7 @@ public class Shaun {
 
         Scanner scanner = new Scanner(System.in);
         ArrayList<Task> taskLists = new ArrayList<>();
+        loadTasks(taskLists);
 
         while (true) {
             try {
@@ -121,10 +125,10 @@ public class Shaun {
         Task task = taskLists.get(index);
         task.markDone();
 
-        printLine();
-        System.out.println("Nice! I've marked this task as done: ");
-        System.out.println(" " + task + " " + taskLists.get(index).description);
-        printLine();
+            printLine();
+            System.out.println("Nice! I've marked this task as done: ");
+            System.out.println(" " + taskLists.get(index).getStatus() + " " + taskLists.get(index).description);
+            printLine();
     }
 
     private static void unmarkTaskNotDone(String userInput, ArrayList<Task> taskLists) throws ShaunException {
@@ -152,6 +156,8 @@ public class Shaun {
         System.out.println("Ok, I've marked this task as not done yet: ");
         System.out.println(" " + task + " " + taskLists.get(index).description);
         printLine();
+
+        saveTasks(taskLists);
     }
 
     private static void addToDo(String userInput, ArrayList<Task> taskLists) {
@@ -160,6 +166,8 @@ public class Shaun {
         Task t = new Todo(description);
         taskLists.add(t);
         showAdded(t, taskLists.size());
+
+        saveTasks(taskLists);
     }
 
     private static void addDeadline(String userInput, ArrayList<Task> taskLists) {
@@ -173,6 +181,8 @@ public class Shaun {
         Task t = new Deadline(description, by);
         taskLists.add(t);
         showAdded(t, taskLists.size());
+
+        saveTasks(taskLists);
     }
 
     private static void addEvent(String userInput, ArrayList<Task> taskLists) {
@@ -189,6 +199,8 @@ public class Shaun {
         Task t = new Event(description, from, to);
         taskLists.add(t);
         showAdded(t, taskLists.size());
+
+        saveTasks(taskLists);
     }
 
     private static void showAdded(Task task, int totalTasks) {
@@ -226,5 +238,72 @@ public class Shaun {
         System.out.println(" " + removedTask);
         System.out.println("Now you have " + taskLists.size() + " tasks in the list.");
         printLine();
+    }
+
+    private static final String FILE_PATH = "." + File.separator + "data" + File.separator + "shaun.txt";
+
+    private static void loadTasks(ArrayList<Task> taskLists) throws IOException {
+        try {
+            File file = new File(FILE_PATH);
+
+            file.getParentFile().mkdirs();
+
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            Scanner fileScanner = new Scanner(file);
+
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] parts = line.split(" \\| ");
+
+                String type = parts[0];
+                boolean isDone = parts[1].equals("1");
+                String description = parts[2];
+
+                Task task;
+
+                switch (type) {
+                case "T":
+                    task = new Todo(description);
+                    break;
+                case "D":
+                    task = new Deadline(description, parts[3]);
+                    break;
+                case "E":
+                    String[] timeParts = parts[3].split(" to ");
+                    task = new Event(description, timeParts[0], timeParts[1]);
+                    break;
+                default:
+                    continue;
+                }
+
+                if (isDone) {
+                    task.markDone();
+                }
+
+                taskLists.add(task);
+            }
+
+            fileScanner.close();
+        } catch (IOException e) {
+            System.out.println("Error loading file...");
+        }
+    }
+
+    private static void saveTasks(ArrayList<Task> taskLists) {
+        try {
+            FileWriter writer = new FileWriter(FILE_PATH);
+
+            for (Task task : taskLists) {
+                writer.write(task.toFileFormat() + System.lineSeparator());
+            }
+
+            writer.close();
+
+        } catch (IOException e) {
+            System.out.println("Error saving file...");
+        }
     }
 }
