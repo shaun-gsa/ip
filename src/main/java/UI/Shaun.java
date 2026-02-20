@@ -1,9 +1,5 @@
 package UI;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
 import Shaun.exception.InvalidCommandException;
 import Shaun.exception.ShaunException;
 import Task.Task;
@@ -11,6 +7,9 @@ import Task.Todo;
 import Task.Event;
 import Task.Deadline;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -75,13 +74,14 @@ public class Shaun {
                     continue;
                 }
 
+                if (userInput.startsWith("delete ")) {
+                    deleteTask(userInput, taskLists);
+                    continue;
+                }
+
                 throw new InvalidCommandException(
                         "Command Invalid. Please enter a valid command."
                 );
-                /*taskLists.add(new Task(userInput));
-                printLine();
-                System.out.println("added: " + userInput);
-                printLine();*/
 
             } catch (ShaunException e) {
                 printLine();
@@ -103,32 +103,61 @@ public class Shaun {
         printLine();
     }
 
-    private static void markTaskAsDone(String userInput, ArrayList<Task> taskLists) {
-        int index = Integer.parseInt(userInput.substring(5)) - 1;
+    private static void markTaskAsDone(String userInput, ArrayList<Task> taskLists) throws ShaunException {
+        String[] parts = userInput.trim().split("\\s+");
 
-        if (index >= 0 && index < taskLists.size()) {
-            taskLists.get(index).markDone();
-
-            printLine();
-            System.out.println("Nice! I've marked this task as done: ");
-            System.out.println(" " + taskLists.get(index).getStatus() + " " + taskLists.get(index).description);
-            printLine();
+        if (parts.length != 2) {
+            throw new ShaunException("Command: mark <task number>");
         }
+
+        int index;
+
+        try {
+            index = Integer.parseInt(parts[1]) - 1;
+        } catch (NumberFormatException e) {
+            throw new ShaunException("Task number invalid");
+        }
+
+        if (index < 0 || index >= taskLists.size()) {
+            throw new ShaunException(("Task number out of range"));
+        }
+
+        Task task = taskLists.get(index);
+        task.markDone();
+
+        printLine();
+        System.out.println("Nice! I've marked this task as done: ");
+        System.out.println(" " + task + " " + taskLists.get(index).description);
+        printLine();
 
         saveTasks(taskLists);
     }
 
-    private static void unmarkTaskNotDone(String userInput, ArrayList<Task> taskLists) {
-        int index = Integer.parseInt(userInput.substring(7)) - 1;
+    private static void unmarkTaskNotDone(String userInput, ArrayList<Task> taskLists) throws ShaunException {
 
-        if (index >= 0 && index < taskLists.size()) {
-            taskLists.get(index).unmarkDone();
+        String[] parts = userInput.trim().split("\\s+");
 
-            printLine();
-            System.out.println("Ok, I've marked this task as not done yet: ");
-            System.out.println(" " + taskLists.get(index).getStatus() + " " + taskLists.get(index).description);
-            printLine();
+        if (parts.length != 2) {
+            throw new ShaunException("Command: unmark <task number>");
         }
+
+        int index;
+
+
+        try {
+            index = Integer.parseInt(userInput.substring(7)) - 1;
+        } catch (NumberFormatException e) {
+            throw new ShaunException("Task number invalid");
+        }
+
+        if (index < 0 || index >= taskLists.size()) { throw new ShaunException("Task number out of range."); }
+        Task task = taskLists.get(index);
+        task.unmarkDone();
+
+        printLine();
+        System.out.println("Ok, I've marked this task as not done yet: ");
+        System.out.println(" " + task + " " + taskLists.get(index).description);
+        printLine();
 
         saveTasks(taskLists);
     }
@@ -181,6 +210,35 @@ public class Shaun {
         System.out.println("Got it. I've added this task:");
         System.out.println(" " + task);
         System.out.println("Now you have " + totalTasks + " tasks in the list.");
+        printLine();
+    }
+
+    private static void deleteTask(String userInput, ArrayList<Task> taskLists) throws ShaunException {
+
+        String[] parts = userInput.trim().split("\\s+");
+
+        if (parts.length != 2) {
+            throw new ShaunException("Command: delete <task number>");
+        }
+
+        int index;
+
+        try {
+            index = Integer.parseInt(parts[1]) - 1;
+        } catch (NumberFormatException e) {
+            throw new ShaunException("Invalid task number");
+        }
+
+        if (index < 0 || index >= taskLists.size()) {
+            throw new ShaunException("Task number not in range");
+        }
+
+        Task removedTask = taskLists.remove(index);
+
+        printLine();
+        System.out.println("Noted. I've removed this task:");
+        System.out.println(" " + removedTask);
+        System.out.println("Now you have " + taskLists.size() + " tasks in the list.");
         printLine();
     }
 
@@ -250,5 +308,4 @@ public class Shaun {
             System.out.println("Error saving file...");
         }
     }
-
 }
