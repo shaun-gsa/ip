@@ -20,8 +20,6 @@ public class Storage {
         this.filePath = filePath;
     }
 
-    // private static final String FILE_PATH = "." + File.separator + "data" + File.separator + "shaun.txt";
-
     public TaskList loadTasks() {
 
         ArrayList<Task> tasks = new ArrayList<>();
