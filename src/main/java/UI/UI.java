@@ -45,4 +45,21 @@ public class UI {
         printLine();
     }
 
+    public void printFindResults(TaskList matches) {
+        printLine();
+
+        if (matches.size() == 0) {
+            System.out.println("No matching tasks found");
+            printLine();
+            return;
+        }
+
+        System.out.println("Here are the matching tasks in your list: ");
+
+        for (int i = 0; i < matches.size(); i++) {
+            System.out.println((i + 1) + ". " + matches.getTask(i));
+        }
+
+        printLine();
+    }
 }

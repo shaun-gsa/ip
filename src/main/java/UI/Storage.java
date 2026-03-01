@@ -1,5 +1,6 @@
 package UI;
 
+import Shaun.exception.ShaunException;
 import Task.Task;
 import Task.Event;
 import Task.Deadline;
@@ -69,6 +70,8 @@ public class Storage {
             fileScanner.close();
         } catch (IOException e) {
             System.out.println("Error loading file...");
+        } catch (ShaunException e) {
+            throw new RuntimeException(e);
         }
 
         return new TaskList(tasks);

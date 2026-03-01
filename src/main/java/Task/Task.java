@@ -30,4 +30,8 @@ public class Task {
         String status = isDone ? "1" : "0";
         return "T | " + status + " | " + description;
     }
+
+    public String getDescription() {
+        return description;
+    }
 }

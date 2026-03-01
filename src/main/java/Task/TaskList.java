@@ -30,4 +30,16 @@ public class TaskList {
         return tasks.size();
     }
 
+    public TaskList find(String taskWord) {
+        ArrayList<Task> matches = new ArrayList<>();
+
+        for (Task task: tasks) {
+            if (task.getDescription().contains(taskWord)) {
+                matches.add(task);
+            }
+        }
+
+        return new TaskList(matches);
+    }
+
 }

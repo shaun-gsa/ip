@@ -1,13 +1,22 @@
 package Task;
+import Shaun.exception.ShaunException;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Deadline extends Task {
     private LocalDate by;
 
-    public Deadline(String description, String by) {
+    public Deadline(String description, String by) throws ShaunException {
         super(description);
-        this.by = LocalDate.parse(by);
+        try {
+            this.by = LocalDate.parse(by);
+        } catch (DateTimeParseException e) {
+            throw new ShaunException(
+                    "Deadline Format: deadline <task> /by yyyy-MM-dd (e.g. deadline return book /by 2026-03-01)"
+            );
+        }
     }
 
     @Override

@@ -42,6 +42,11 @@ public class Parser {
             return;
         }
 
+        if (userInput.startsWith("find ")) {
+            findTasks(userInput, tasks, ui);
+            return;
+        }
+
         throw new InvalidCommandException("Invalid command; Please enter a valid command: ");
 
     }
@@ -75,7 +80,6 @@ public class Parser {
     }
 
     public static void unmarkTaskNotDone(String userInput, TaskList taskLists, UI ui) throws ShaunException {
-
         String[] parts = userInput.trim().split("\\s+");
 
         if (parts.length != 2) {
@@ -108,7 +112,7 @@ public class Parser {
         ui.showAdded(t, taskLists.size());
     }
 
-    public static void addDeadline(String userInput, TaskList taskLists, UI ui) {
+    public static void addDeadline(String userInput, TaskList taskLists, UI ui) throws ShaunException {
         String remainder = userInput.substring(9).trim();
 
         String[] parts = remainder.split("\\s*/by\\s*", 2);
@@ -138,7 +142,6 @@ public class Parser {
     }
 
     public static void deleteTask(String userInput, TaskList taskLists, UI ui) throws ShaunException {
-
         String[] parts = userInput.trim().split("\\s+");
 
         if (parts.length != 2) {
@@ -164,5 +167,12 @@ public class Parser {
         System.out.println(" " + removedTask);
         System.out.println("Now you have " + taskLists.size() + " tasks in the list.");
         ui.printLine();
+    }
+
+    public static void findTasks(String userInput, TaskList tasks, UI ui) {
+        String keyword = userInput.substring(5).trim();
+        TaskList matches = tasks.find(keyword);
+
+        ui.printFindResults(matches);
     }
 }
