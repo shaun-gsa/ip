@@ -13,14 +13,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+/** Helps to load and save task data to a file. */
 public class Storage {
 
     private final String filePath;
 
+    /** Constructor for filePath. */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Loads the tasks from storage file.
+     *
+     * @return a TaskList containing stored tasks and their data.
+     */
     public TaskList loadTasks() {
 
         ArrayList<Task> tasks = new ArrayList<>();
@@ -77,6 +84,11 @@ public class Storage {
         return new TaskList(tasks);
     }
 
+    /**
+     * Saves the user input task to the storage file.
+     *
+     * @param taskList the task list to be saved.
+     * */
     public void saveTasks(TaskList taskList) {
         try {
             FileWriter writer = new FileWriter(filePath);
