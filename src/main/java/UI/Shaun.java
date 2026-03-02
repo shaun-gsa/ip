@@ -6,12 +6,18 @@ import Task.TaskList;
 import java.io.File;
 import java.util.Scanner;
 
+/** Entry point of Chatbot application named Shaun. */
 public class Shaun {
 
     private static final UI ui = new UI();
     private static final String FILE_PATH =
             "." + File.separator + "data" + File.separator + "shaun.txt";
 
+    /**
+     * Starts the chatbot program and handles user interaction loop.
+     *
+     * @param args Command Line arguments.
+     *  */
     public static void main(String[] args) {
 
         ui.welcomeMessage();

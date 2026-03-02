@@ -8,8 +8,17 @@ import Task.Todo;
 import Task.Event;
 import Task.Deadline;
 
+/** Parses user input, then executes the commands accordingly. */
 public class Parser {
 
+    /**
+     * Processes a user command and delegates execution.
+     *
+     * @param userInput Command entered by user on CLI.
+     * @param tasks Current task list from storage file.
+     * @param ui The user interface for displaying output.
+     * @throws ShaunException For invalid commands.
+     * */
     public static void handleCommand(String userInput, TaskList tasks, UI ui) throws ShaunException {
 
         if (userInput.startsWith("mark ")) {
@@ -51,7 +60,14 @@ public class Parser {
 
     }
 
-    public static void markTaskAsDone(String userInput, TaskList tasks, UI ui) throws ShaunException {
+    /**
+     * Checks the specific task in the task list.
+     *
+     * @param userInput The full user command.
+     * @param taskLists The task list.
+     * @param ui The user interface.
+     * */
+    public static void markTaskAsDone(String userInput, TaskList taskLists, UI ui) throws ShaunException {
         String[] parts = userInput.trim().split("\\s+");
 
         if (parts.length != 2) {
@@ -66,19 +82,26 @@ public class Parser {
             throw new ShaunException("Task number invalid");
         }
 
-        if (index < 0 || index >= tasks.size()) {
+        if (index < 0 || index >= taskLists.size()) {
             throw new ShaunException(("Task number out of range"));
         }
 
-        Task task = tasks.getTask(index);
+        Task task = taskLists.getTask(index);
         task.markDone();
 
         ui.printLine();
         System.out.println("Nice! I've marked this task as done: ");
-        System.out.println(" " + tasks.getTask(index).getStatus() + " " + tasks.getTask(index).description);
+        System.out.println(" " + taskLists.getTask(index).getStatus() + " " + taskLists.getTask(index).description);
         ui.printLine();
     }
 
+    /**
+     * Unchecks the specific task in the task list.
+     *
+     * @param userInput The full user command.
+     * @param taskLists The task list.
+     * @param ui The user interface.
+     * */
     public static void unmarkTaskNotDone(String userInput, TaskList taskLists, UI ui) throws ShaunException {
         String[] parts = userInput.trim().split("\\s+");
 
@@ -104,6 +127,13 @@ public class Parser {
         ui.printLine();
     }
 
+    /**
+     * Adds a ToDo task to the task list.
+     *
+     * @param userInput The full user command.
+     * @param taskLists The task list.
+     * @param ui The user interface.
+     * */
     public static void addToDo(String userInput, TaskList taskLists, UI ui) {
         String description = userInput.substring(5).trim();
 
@@ -112,6 +142,13 @@ public class Parser {
         ui.showAdded(t, taskLists.size());
     }
 
+    /**
+     * Adds a Deadline task to the task list.
+     *
+     * @param userInput The full user command.
+     * @param taskLists The task list.
+     * @param ui The user interface.
+     * */
     public static void addDeadline(String userInput, TaskList taskLists, UI ui) throws ShaunException {
         String remainder = userInput.substring(9).trim();
 
@@ -125,6 +162,13 @@ public class Parser {
         ui.showAdded(t, taskLists.size());
     }
 
+    /**
+     * Adds a Event task to the task list.
+     *
+     * @param userInput The full user command.
+     * @param taskLists The task list.
+     * @param ui The user interface.
+     * */
     public static void addEvent(String userInput, TaskList taskLists, UI ui) {
         String remainder = userInput.substring(6).trim();
 
@@ -141,6 +185,13 @@ public class Parser {
         ui.showAdded(t, taskLists.size());
     }
 
+    /**
+     * Deletes a specific task from the task list.
+     *
+     * @param userInput The full user command.
+     * @param taskLists The task list.
+     * @param ui The user interface.
+     * */
     public static void deleteTask(String userInput, TaskList taskLists, UI ui) throws ShaunException {
         String[] parts = userInput.trim().split("\\s+");
 
@@ -169,9 +220,16 @@ public class Parser {
         ui.printLine();
     }
 
-    public static void findTasks(String userInput, TaskList tasks, UI ui) {
+    /**
+     * Finds all the tasks with a specific keyword from the task list.
+     *
+     * @param userInput The full user command.
+     * @param taskLists The task list.
+     * @param ui The user interface.
+     * */
+    public static void findTasks(String userInput, TaskList taskLists, UI ui) {
         String keyword = userInput.substring(5).trim();
-        TaskList matches = tasks.find(keyword);
+        TaskList matches = taskLists.find(keyword);
 
         ui.printFindResults(matches);
     }
