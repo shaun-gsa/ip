@@ -1,30 +1,84 @@
-# Duke User Guide
+# Shaun User Guide
 
-// Update the title above to match the actual product name
+Shaun is a command-line task management chatbot that aims to track tasks for a user.
 
-// Product screenshot goes here
+## Quick Start
 
-// Product intro goes here
+1. Ensure you have Java 17 or above installed.
+2. Download the latest 'Shaun.jar' file.
+3. Copy the file to your desired folder.
+4. Open a command prompt in that folder.
+5. Run the command: java -jar Shaun.jar
 
-## Adding deadlines
+### Adding a Todo
 
-// Describe the action and its outcome.
+Adds a simple task without any date or time.
 
-// Give examples of usage
+Format: todo DESCRIPTION
 
-Example: `keyword (optional arguments)`
+Example: todo read book
 
-// A description of the expected outcome goes here
+### Adding a Deadline
 
-```
-expected output
-```
+Adds a task with a deadline.
 
-## Feature ABC
+Format: deadline DESCRIPTION /by DATE
 
-// Feature details
+Example: deadline submit quiz /by 2026-03-06
 
+### Adding an Event
 
-## Feature XYZ
+Adds a task that occurs within a time period.
 
-// Feature details
+Format: event DESCRIPTION /from START /to END
+
+Example: event project meeting /from 2pm /to 4pm
+
+### Listing all tasks
+
+Displays every task name and description in the task list.
+
+Format: list
+
+### Marking a Task as Done
+
+Marks the specified task as completed.
+
+Format: mark INDEX
+
+Example: mark 2
+
+### Unmarking a Task as not done
+
+Unmarks the specified task as not completed.
+
+Format: unmark INDEX
+
+Example: unmark 2
+
+### Deleting a Task
+
+Removes a task from the list.
+
+Format: delete INDEX
+
+Example: delete 2
+
+### Finding Tasks
+
+Finds tasks that contain a given keyword.
+
+Format: find KEYWORD
+
+Example: find book
+
+---
+
+## Exiting
+
+```markdown
+### Exiting the Program
+
+Closes the application.
+
+Format: bye
